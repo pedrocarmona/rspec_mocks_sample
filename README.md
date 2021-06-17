@@ -1,24 +1,25 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+```
+rbenv local 2.7.3
+CUSTOM_RUBY_VERSION=2.7.3 BUNDLE_GEMFILE=Gemfile bundle
+CUSTOM_RUBY_VERSION=2.7.3 BUNDLE_GEMFILE=Gemfile bundle exec rspec
+```
 
-Things you may want to cover:
+```
+rbenv local 2.7.3
+CUSTOM_RUBY_VERSION=2.7.3 BUNDLE_GEMFILE=GemfileNext bundle
+CUSTOM_RUBY_VERSION=2.7.3 BUNDLE_GEMFILE=GemfileNext bundle exec rspec
+```
 
-* Ruby version
+```
+rbenv local 3.0.1
+CUSTOM_RUBY_VERSION=3.0.1 BUNDLE_GEMFILE=Gemfile bundle
+CUSTOM_RUBY_VERSION=3.0.1 BUNDLE_GEMFILE=Gemfile bundle exec rspec
+```
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```
+rbenv local 3.0.1
+CUSTOM_RUBY_VERSION=3.0.1 BUNDLE_GEMFILE=GemfileNext bundle
+CUSTOM_RUBY_VERSION=3.0.1 BUNDLE_GEMFILE=GemfileNext bundle exec rspec
+```

@@ -1,0 +1,135 @@
+version: 2.1 # Use 2.1 to enable using orbs and other features.
+
+# Declare the orbs that we'll use in our config.
+orbs:
+  ruby: circleci/ruby@1.0
+
+jobs:
+  test_ruby_2_7_3_rspec_mocks_3_10_2:
+    docker:
+      - image: cimg/ruby:2.7-node
+      - image: circleci/postgres:9.5-alpine
+        environment:
+          POSTGRES_USER: circleci-demo-ruby
+          POSTGRES_DB: rspec_mocks_sample_test
+          POSTGRES_PASSWORD: ""
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      PGHOST: 127.0.0.1
+      PGUSER: circleci-demo-ruby
+      PGPASSWORD: ""
+      RAILS_ENV: test
+      BUNDLE_GEMFILE: Gemfile
+      CUSTOM_RUBY_VERSION: 2.7.3
+    steps:
+      - checkout
+      - ruby/install-deps
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Database setup
+          command: bundle exec rails db:schema:load --trace
+      - run:
+          name: Test ruby 2.7.3 rspec-mocks 3.10.2
+          command: bundle exec rspec
+            
+  test_ruby_3_0_1_rspec_mocks_3_10_2:
+    docker:
+      - image: cimg/ruby:3.0-node
+      - image: circleci/postgres:9.5-alpine
+        environment:
+          POSTGRES_USER: circleci-demo-ruby
+          POSTGRES_DB: rspec_mocks_sample_test
+          POSTGRES_PASSWORD: ""
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      PGHOST: 127.0.0.1
+      PGUSER: circleci-demo-ruby
+      PGPASSWORD: ""
+      RAILS_ENV: test
+      BUNDLE_GEMFILE: Gemfile
+      CUSTOM_RUBY_VERSION: 3.0.1
+    steps:
+      - checkout
+      - ruby/install-deps
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Database setup
+          command: bundle exec rails db:schema:load --trace
+      - run:
+          name: Test ruby 3.0.1 rspec-mocks 3.10.2
+          command: bundle exec rspec
+
+  test_ruby_2_7_3_rspec_mocks_next:
+    docker:
+      - image: cimg/ruby:2.7-node
+      - image: circleci/postgres:9.5-alpine
+        environment:
+          POSTGRES_USER: circleci-demo-ruby
+          POSTGRES_DB: rspec_mocks_sample_test
+          POSTGRES_PASSWORD: ""
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      PGHOST: 127.0.0.1
+      PGUSER: circleci-demo-ruby
+      PGPASSWORD: ""
+      RAILS_ENV: test
+      BUNDLE_GEMFILE: GemfileNext
+      CUSTOM_RUBY_VERSION: 2.7.3
+    steps:
+      - checkout
+      - ruby/install-deps
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Database setup
+          command: bundle exec rails db:schema:load --trace
+      - run:
+          name: Test ruby 2.7.3 rspec-mocks next
+          command: bundle exec rspec
+            
+  test_ruby_3_0_1_rspec_mocks_next:
+    docker:
+      - image: cimg/ruby:3.0-node
+      - image: circleci/postgres:9.5-alpine
+        environment:
+          POSTGRES_USER: circleci-demo-ruby
+          POSTGRES_DB: rspec_mocks_sample_test
+          POSTGRES_PASSWORD: ""
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      PGHOST: 127.0.0.1
+      PGUSER: circleci-demo-ruby
+      PGPASSWORD: ""
+      RAILS_ENV: test
+      BUNDLE_GEMFILE: GemfileNext
+      CUSTOM_RUBY_VERSION: 3.0.1
+    steps:
+      - checkout
+      - ruby/install-deps
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Database setup
+          command: bundle exec rails db:schema:load --trace
+      - run:
+          name: Test ruby 3.0.1 rspec-mocks next
+          command: bundle exec rspec
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - test_ruby_2_7_3_rspec_mocks_3_10_2
+      - test_ruby_3_0_1_rspec_mocks_3_10_2
+      - test_ruby_2_7_3_rspec_mocks_next
+      - test_ruby_3_0_1_rspec_mocks_next
